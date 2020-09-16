@@ -1,6 +1,7 @@
 import socket
 import re
 import multiprocessing
+import urllib.parse as parse
 '''实现简单web服务器，用多进程'''
 
 
@@ -18,6 +19,9 @@ def service_client(new_socket):
         file_name = ret.group(1)
         if file_name == "/":
             file_name = "/index.html"
+        else:
+            file_name = parse.unquote(file_name)
+            print(file_name)
     # 2 返回http格式数据，给浏览器
     try:
         print("./html" + file_name)
@@ -52,6 +56,7 @@ def main():
     while True:
         # 4 等待新客户端的连接(得到套接字，得到客户端地址)
         new_socket, client_addr = tcp_server_socket.accept()
+        print(client_addr)
         # 5 为这个客户端进行服务
         srv_client = multiprocessing.Process(target=service_client, args=(new_socket,))
         srv_client.start()
