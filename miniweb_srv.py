@@ -50,7 +50,7 @@ def main():
     tcp_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcp_server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     # 2 绑定
-    tcp_server_socket.bind(("", 7890))
+    tcp_server_socket.bind(("146.56.204.243", 6060))
     # 3 变为监听套接字
     tcp_server_socket.listen(128)
     while True:
