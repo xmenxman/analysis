@@ -30,33 +30,46 @@ zone_tc = ['城厢镇', '城厢', '浏河镇', '浏河', '浮桥镇', '浮桥', 
            '港口开发区', '经济开发区', '科教新城']
 zone_yq = ['娄葑街道', '娄葑', '斜塘街道', '斜塘', '唯亭街道', '唯亭', '胜浦街道', '胜浦', '湖西社区', '湖东社区',
            '东沙湖社区', '月亮湾社区']
-zone = zone_hy + zone_zz + zone_sz + zone_gs + zone_xc + zone_wz + zone_wj + zone_xq + zone_cs + zone_ks \
+# zone = zone_hy + zone_zz + zone_sz + zone_gs + zone_xc + zone_wz + zone_wj + zone_xq + zone_cs + zone_ks \
+#        + zone_zjg + zone_tc + zone_yq
+zone = zone_sz + zone_gs + zone_xc + zone_wz + zone_wj + zone_xq + zone_cs + zone_ks \
        + zone_zjg + zone_tc + zone_yq
 
 def read_excel():
     wb = xlrd.open_workbook(filename=file_name)
     sheet1 = wb.sheet_by_name('查询结果')
     cols = sheet1.col_values(9)
-    txt = ''.join(cols)
-    for z in zone:
-        txt = txt.replace(z, '')
-    jlist = jieba.lcut(txt)
+    cols.pop(0)
+    result_cols = []
+    for row_txt in cols:
+        for z in zone:
+            row_txt = row_txt.replace(z, '')
+        result_cols.append(row_txt[0:2])
+    result_cols.sort()
     counts = {}
-    for word in jlist:
-        if len(word) == 1:
-            continue
-        else:
-            counts[word] = counts.get(word, 0) + 1
+    for word in result_cols:
+        counts[word] = counts.get(word, 0) + 1
     items = list(counts.items())
     items.sort(key=lambda x:x[1], reverse=True)
     for i in items:
         word, count = i
         print("{0:<10}{1:>5}".format(word, count))
-    # for row_txt in cols:
-    #     for z in zone:
-    #         row_txt = row_txt.replace(z, '')
-    #     jlist = jieba.lcut(row_txt)
-    #     print(jlist)
+
+    # txt = ''.join(cols)
+    # for z in zone:
+    #     txt = txt.replace(z, '')
+    # jlist = jieba.lcut(txt)
+    # counts = {}
+    # for word in jlist:
+    #     if len(word) == 1:
+    #         continue
+    #     else:
+    #         counts[word] = counts.get(word, 0) + 1
+    # items = list(counts.items())
+    # items.sort(key=lambda x:x[1], reverse=True)
+    # for i in items:
+    #     word, count = i
+    #     print("{0:<10}{1:>5}".format(word, count))
     # jlist = jieba.lcut(txt)
 
 
